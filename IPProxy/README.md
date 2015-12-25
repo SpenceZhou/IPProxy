@@ -11,6 +11,7 @@
 ####方式
 - 获取国内ip段，参照[查错IT网](http://ipcn.chacuo.net)信息，将ip资源统一划分为：xxx.xxx.xxx.0/24格式，供后续使用。
 - 由于计算机端口较多，但常用作代理的端口却比较固定（比如：80，8080，8123）等，建立常用端口词典，提高程序效率。
+
 ####问题
 现在存在ip资源多（ipv4已分配36亿，中国占9.28%），单机处理能力有限，如果全部扫描则程序效率（单位时间，资源下查询出的可用代理数量）很低。
 ####解决思路
@@ -25,6 +26,7 @@
 3. 使用httpclient中的代理功能，将步骤2中的ip和port组合设为请求的代理进行请求。
 4. 如果请求成功，且请求结果与预设结果相同则说明测ip和端口组合可作为代理资源输出。
 5. 注：大型网站都包含robots.txt来对[Robots协议](http://baike.baidu.com/link?url=9wzjWJf3c-sgGBQ_ofwnu4t8dQoEzQyARwul2scZwNgo56ZQkj1kNcyc-fkUQFSHVhN-P986fdGahbHEXJmeE0Tt6nCPgE24tPDmP9KOxrPCYHI_H-WLejaSGVvrqmgj)进行说明，故本程序以robots.txt文件进行代理测试请求。
+
 ####问题
 不能提供代理类型（http，https，socket）和匿名类型（透明，普匿，高匿）信息。
 ####解决思路
