@@ -16,16 +16,14 @@ import org.slf4j.LoggerFactory;
 
 import cc.dorado.spence.IPProxy.groper.GropeIp;
 import cc.dorado.spence.IPProxy.resource.IPResource;
-import cc.dorado.spence.IPProxy.resource.IPSegment;
 import cc.dorado.spence.IPProxy.resource.Port;
-import cc.dorado.spence.IPProxy.resource.URL;
 
 public class StartUp {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
-	private ArrayBlockingQueue<String> queue = new ArrayBlockingQueue<String>(1000);
+	private ArrayBlockingQueue<String> queue = new ArrayBlockingQueue<String>(2048);
 	IPResource resource = new IPResource();
-	private int defaultThreadNum = 100;
+	private int defaultThreadNum = 1024;
 	private long totalScanIp;
 	private long availableIp;
 	
@@ -53,7 +51,7 @@ public class StartUp {
 	}
 
 	public void addQueue(){
-		List<IPSegment> IPSegment = resource.getIpResource(URL.CHINANET);
+		/*List<IPSegment> IPSegment = resource.getIpResource(URL.CHINANET);
 		for(IPSegment segment:IPSegment){
 			List<String> shortIPSegments = resource.shortIPSegment(segment);
 			for(String shortIPSegment:shortIPSegments){
@@ -65,7 +63,28 @@ public class StartUp {
 					e.printStackTrace();
 				}
 			}
+		}*/
+		
+		File file = new File("F:\\ip.txt");
+		try {
+			String str = FileUtils.readFileToString(file);
+			String[] strs = StringUtils.split(str);
+			System.out.println(strs.length);
+			for(String s:strs){
+				try {
+					queue.put(s);
+					logger.debug(s);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
+		
 	}
 	
 	public void gorpe(String shortSegment) {
@@ -102,12 +121,11 @@ public class StartUp {
 		
 		//消费者
 		
-		ThreadPoolExecutor executor = new ThreadPoolExecutor(defaultThreadNum, defaultThreadNum+10, 200, TimeUnit.MILLISECONDS,
-				new ArrayBlockingQueue<Runnable>(defaultThreadNum/2));
+		/*ThreadPoolExecutor executor = new ThreadPoolExecutor(defaultThreadNum+10, defaultThreadNum+20, 200, TimeUnit.MILLISECONDS,
+				new ArrayBlockingQueue<Runnable>(defaultThreadNum/2));*/
 		
 		for(int i=0;i<defaultThreadNum;i++){
-			executor.execute(new Runnable() {
-				
+			new Thread(new Runnable() {
 				@Override
 				public void run() {
 					while(true){
@@ -124,12 +142,13 @@ public class StartUp {
 					}
 					
 				}
-			});
+			}).start();
 		}
 		
 	}
 	
 	public static void main(String[] args) {
 		new StartUp().start();
+
 	}
 }
