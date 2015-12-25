@@ -25,7 +25,7 @@ public class StartUp {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	private ArrayBlockingQueue<String> queue = new ArrayBlockingQueue<String>(1000);
 	IPResource resource = new IPResource();
-	private int defaultThreadNum = 256;
+	private int defaultThreadNum = 100;
 	private long totalScanIp;
 	private long availableIp;
 	
